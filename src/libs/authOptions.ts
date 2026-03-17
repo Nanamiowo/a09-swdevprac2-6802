@@ -1,8 +1,12 @@
 import Credentials from "next-auth/providers/credentials";
+import { AuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
+import { User } from "next-auth";
+
 import userLogIn from "@/libs/userLogIn";
 import getUserProfile from "@/libs/getUserProfile";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     Credentials({
       name: "Credentials",
@@ -25,13 +29,13 @@ export const authOptions = {
           name: profile.data.name,
           email: profile.data.email,
           accessToken: res.token,
-        };
+        } as any; // 👈 กัน TS งอแงก่อน
       },
     }),
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: User | any }) {
       if (user) {
         token.accessToken = user.accessToken;
         token.name = user.name;
@@ -40,7 +44,7 @@ export const authOptions = {
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: JWT }) {
       session.accessToken = token.accessToken;
       session.user = {
         name: token.name,

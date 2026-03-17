@@ -10,7 +10,7 @@ export default async function CardPanel(){
     <div className="grid grid-cols-3 gap-8 mt-6 justify-items-center">
 
       {
-        venueJson.data.map((item)=>(
+        venueJson.data.map((item: any)=>(
           <Card
             key={item.id}
             vid={item.id}
